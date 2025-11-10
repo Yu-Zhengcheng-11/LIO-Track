@@ -9,13 +9,16 @@ Panels:
         - /links1
         - /Odometry1
         - /Point Cloud1
+        - /Point Cloud1/Velodyne1
+        - /Point Cloud1/Detections1
         - /Feature Cloud1
         - /Mapping1
-        - /Mapping1/Map (global)1
+        - /Mapping1/Map (cloud)1
         - /Tracking1
         - /Tracking1/Dynamic Objects1
+        - /Tracking1/Dynamic Object Paths1
       Splitter Ratio: 0.5940054655075073
-    Tree Height: 686
+    Tree Height: 1117
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Views
@@ -38,9 +41,12 @@ Visualization Manager:
       Displays:
         - Class: rviz/TF
           Enabled: false
+          Filter (blacklist): ""
+          Filter (whitelist): ""
           Frame Timeout: 999
           Frames:
             All Enabled: false
+          Marker Alpha: 1
           Marker Scale: 3
           Name: TF
           Show Arrows: true
@@ -50,26 +56,32 @@ Visualization Manager:
             {}
           Update Interval: 0
           Value: false
-        - Class: rviz/Axes
+        - Alpha: 1
+          Class: rviz/Axes
           Enabled: true
           Length: 2
           Name: map
           Radius: 0.5
           Reference Frame: map
+          Show Trail: false
           Value: true
-        - Class: rviz/Axes
+        - Alpha: 1
+          Class: rviz/Axes
           Enabled: true
           Length: 1
           Name: base_link
           Radius: 0.30000001192092896
           Reference Frame: base_link
+          Show Trail: false
           Value: true
-        - Class: rviz/Axes
+        - Alpha: 1
+          Class: rviz/Axes
           Enabled: true
           Length: 1
           Name: lidar_link
           Radius: 0.10000000149011612
           Reference Frame: lidar_link
+          Show Trail: false
           Value: true
       Enabled: true
       Name: links
@@ -96,6 +108,7 @@ Visualization Manager:
           Keep: 300
           Name: Odom IMU
           Position Tolerance: 0.10000000149011612
+          Queue Size: 10
           Shape:
             Alpha: 1
             Axes Length: 0.5
@@ -130,6 +143,7 @@ Visualization Manager:
           Keep: 300
           Name: Odom GPS
           Position Tolerance: 0.10000000149011612
+          Queue Size: 10
           Shape:
             Alpha: 1
             Axes Length: 1
@@ -164,6 +178,7 @@ Visualization Manager:
           Keep: 300
           Name: Odom lidar
           Position Tolerance: 0.10000000149011612
+          Queue Size: 10
           Shape:
             Alpha: 1
             Axes Length: 0.25
@@ -174,14 +189,14 @@ Visualization Manager:
             Shaft Length: 1
             Shaft Radius: 0.05000000074505806
             Value: Axes
-          Topic: /lio_segmot/mapping/odometry
+          Topic: /lio_track/mapping/odometry
           Unreliable: false
           Value: false
       Enabled: false
       Name: Odometry
     - Class: rviz/Group
       Displays:
-        - Alpha: 1
+        - Alpha: 0.30000001192092896
           Autocompute Intensity Bounds: false
           Autocompute Value Bounds:
             Max Value: 10
@@ -195,9 +210,9 @@ Visualization Manager:
           Decay Time: 0
           Enabled: true
           Invert Rainbow: false
-          Max Color: 191; 64; 64
-          Max Intensity: 0.9900000095367432
-          Min Color: 191; 64; 64
+          Max Color: 255; 255; 255
+          Max Intensity: 128
+          Min Color: 0; 0; 0
           Min Intensity: 0
           Name: Velodyne
           Position Transformer: XYZ
@@ -206,7 +221,7 @@ Visualization Manager:
           Size (Pixels): 2
           Size (m): 0.009999999776482582
           Style: Points
-          Topic: /lio_segmot/mapping/cloud_deskewed
+          Topic: /lio_track/mapping/cloud_deskewed
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: false
@@ -234,7 +249,7 @@ Visualization Manager:
           Size (Pixels): 3
           Size (m): 0.009999999776482582
           Style: Points
-          Topic: /lio_segmot/mapping/cloud_registered
+          Topic: /lio_track/mapping/cloud_registered
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
@@ -242,15 +257,20 @@ Visualization Manager:
         - Class: jsk_rviz_plugin/BoundingBoxArray
           Enabled: true
           Name: Detections
-          Topic: /lio_segmot/mapping/detections
+          Queue Size: 10
+          Topic: /lio_track/mapping/detections
           Unreliable: false
           Value: true
-          alpha: 0.6000000238418579
+          alpha: 0.800000011920929
+          alpha max: 1
+          alpha method: flat
+          alpha min: 0
           color: 171; 255; 152
           coloring: Flat color
           line width: 0.15000000596046448
           only edge: false
-          show coords: false
+          show coords: true
+          value threshold: 0
       Enabled: true
       Name: Point Cloud
     - Class: rviz/Group
@@ -278,7 +298,7 @@ Visualization Manager:
           Size (Pixels): 5
           Size (m): 0.009999999776482582
           Style: Points
-          Topic: /lio_segmot/feature/cloud_corner
+          Topic: /lio_track/feature/cloud_corner
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
@@ -306,7 +326,7 @@ Visualization Manager:
           Size (Pixels): 3
           Size (m): 0.009999999776482582
           Style: Points
-          Topic: /lio_segmot/feature/cloud_surface
+          Topic: /lio_track/feature/cloud_surface
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
@@ -316,7 +336,7 @@ Visualization Manager:
     - Class: rviz/Group
       Displays:
         - Alpha: 0.30000001192092896
-          Autocompute Intensity Bounds: false
+          Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
             Max Value: 7.4858574867248535
             Min Value: -1.2309398651123047
@@ -327,12 +347,10 @@ Visualization Manager:
           Color: 255; 255; 255
           Color Transformer: Intensity
           Decay Time: 300
-          Enabled: false
+          Enabled: true
           Invert Rainbow: false
-          Max Color: 46; 52; 54
-          Max Intensity: 0.9900000095367432
-          Min Color: 46; 52; 54
-          Min Intensity: 0
+          Max Color: 255; 255; 255
+          Min Color: 0; 0; 0
           Name: Map (cloud)
           Position Transformer: XYZ
           Queue Size: 10
@@ -340,11 +358,11 @@ Visualization Manager:
           Size (Pixels): 2
           Size (m): 0.009999999776482582
           Style: Points
-          Topic: /lio_segmot/mapping/cloud_registered
+          Topic: /lio_track/mapping/cloud_registered
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: false
-          Value: false
+          Value: true
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
@@ -368,7 +386,7 @@ Visualization Manager:
           Size (Pixels): 2
           Size (m): 0.10000000149011612
           Style: Flat Squares
-          Topic: /lio_segmot/mapping/map_local
+          Topic: /lio_track/mapping/map_local
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
@@ -385,7 +403,7 @@ Visualization Manager:
           Color: 255; 255; 255
           Color Transformer: Intensity
           Decay Time: 0
-          Enabled: true
+          Enabled: false
           Invert Rainbow: false
           Max Color: 75; 75; 75
           Min Color: 75; 75; 75
@@ -396,11 +414,11 @@ Visualization Manager:
           Size (Pixels): 2
           Size (m): 0.009999999776482582
           Style: Points
-          Topic: /lio_segmot/mapping/map_global
+          Topic: /lio_track/mapping/map_global
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: false
-          Value: true
+          Value: false
         - Alpha: 1
           Buffer Length: 1
           Class: rviz/Path
@@ -418,10 +436,11 @@ Visualization Manager:
             Z: 0
           Pose Color: 255; 85; 255
           Pose Style: None
+          Queue Size: 10
           Radius: 0.029999999329447746
           Shaft Diameter: 0.10000000149011612
           Shaft Length: 0.10000000149011612
-          Topic: /lio_segmot/mapping/path
+          Topic: /lio_track/mapping/path
           Unreliable: false
           Value: true
         - Alpha: 1
@@ -441,10 +460,11 @@ Visualization Manager:
             Z: 0
           Pose Color: 255; 85; 255
           Pose Style: None
+          Queue Size: 10
           Radius: 0.029999999329447746
           Shaft Diameter: 0.10000000149011612
           Shaft Length: 0.10000000149011612
-          Topic: /lio_segmot/imu/path
+          Topic: /lio_track/imu/path
           Unreliable: false
           Value: true
         - Alpha: 1
@@ -470,59 +490,15 @@ Visualization Manager:
           Size (Pixels): 2
           Size (m): 0.30000001192092896
           Style: Flat Squares
-          Topic: /lio_segmot/mapping/icp_loop_closure_corrected_cloud
+          Topic: /lio_track/mapping/icp_loop_closure_corrected_cloud
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
           Value: false
         - Class: rviz/MarkerArray
           Enabled: true
-          Marker Topic: /lio_segmot/mapping/loop_closure_constraints
+          Marker Topic: /lio_track/mapping/loop_closure_constraints
           Name: Loop constraint
-          Namespaces:
-            {}
-          Queue Size: 100
-          Value: true
-        - Class: jsk_rviz_plugin/BoundingBoxArray
-          Enabled: false
-          Name: Dynamic Objects
-          Topic: /lio_segmot/mapping/objects
-          Unreliable: false
-          Value: false
-          alpha: 0.800000011920929
-          color: 25; 255; 0
-          coloring: Label
-          line width: 0.15000000596046448
-          only edge: true
-          show coords: true
-        - Class: rviz/MarkerArray
-          Enabled: false
-          Marker Topic: /lio_segmot/mapping/object_paths
-          Name: Dynamic Object Paths
-          Namespaces:
-            {}
-          Queue Size: 100
-          Value: false
-        - Class: rviz/MarkerArray
-          Enabled: false
-          Marker Topic: /lio_segmot/mapping/object_labels
-          Name: Dynamic Object Labels
-          Namespaces:
-            {}
-          Queue Size: 100
-          Value: false
-        - Class: rviz/MarkerArray
-          Enabled: false
-          Marker Topic: /lio_segmot/mapping/object_velocities
-          Name: Dynamic Object Predicted Path
-          Namespaces:
-            {}
-          Queue Size: 100
-          Value: false
-        - Class: rviz/Marker
-          Enabled: true
-          Marker Topic: /lio_segmot/mapping/tightly_coupled_object_points
-          Name: Tightly-coupled nodes
           Namespaces:
             {}
           Queue Size: 100
@@ -534,52 +510,41 @@ Visualization Manager:
         - Class: jsk_rviz_plugin/BoundingBoxArray
           Enabled: true
           Name: Dynamic Objects
-          Topic: /lio_segmot/tracking/objects
+          Queue Size: 10
+          Topic: /lio_track/tracking/objects
           Unreliable: false
           Value: true
           alpha: 0.800000011920929
+          alpha max: 1
+          alpha method: flat
+          alpha min: 0
           color: 25; 255; 0
           coloring: Label
           line width: 0.15000000596046448
           only edge: true
-          show coords: false
+          show coords: true
+          value threshold: 0
         - Class: rviz/MarkerArray
-          Enabled: true
-          Marker Topic: /lio_segmot/tracking/object_paths
+          Enabled: false
+          Marker Topic: /lio_track/tracking/object_labels
           Name: Dynamic Object Paths
           Namespaces:
             {}
           Queue Size: 100
-          Value: true
-        - Class: rviz/MarkerArray
-          Enabled: false
-          Marker Topic: /lio_segmot/tracking/object_labels
-          Name: Dynamic Object Labels
-          Namespaces:
-            {}
-          Queue Size: 100
           Value: false
-        - Class: rviz/MarkerArray
-          Enabled: true
-          Marker Topic: /lio_segmot/tracking/object_velocities
-          Name: Dynamic Object Predicted Path
-          Namespaces:
-            {}
-          Queue Size: 100
-          Value: true
-        - Class: rviz/MarkerArray
-          Enabled: true
-          Marker Topic: /lio_segmot/tracking/object_velocity_arrows
-          Name: Dynamic Object Predicted Path Arrow
-          Namespaces:
-            {}
-          Queue Size: 100
-          Value: true
       Enabled: true
       Name: Tracking
+    - Class: rviz/MarkerArray
+      Enabled: false
+      Marker Topic: /lio_track/tracking/object_paths
+      Name: Object Path
+      Namespaces:
+        {}
+      Queue Size: 100
+      Value: false
   Enabled: true
   Global Options:
-    Background Color: 0; 0; 0
+    Background Color: 255; 255; 255
     Default Light: true
     Fixed Frame: map
     Frame Rate: 30
@@ -593,39 +558,39 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 182.35630798339844
+      Distance: 90.00547790527344
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
+      Field of View: 0.7853981852531433
       Focal Point:
-        X: 68.5766372680664
-        Y: 25.248287200927734
-        Z: -78.56790161132812
+        X: 81.82818603515625
+        Y: -25.308744430541992
+        Z: -19.810998916625977
       Focal Shape Fixed Size: false
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.8203978538513184
-      Target Frame: base_link
-      Value: Orbit (rviz)
-      Yaw: 3.4916627407073975
+      Pitch: 0.5747973918914795
+      Target Frame: map
+      Yaw: 0.8616974353790283
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 1022
+  Height: 1518
   Hide Left Dock: false
-  Hide Right Dock: true
-  QMainWindow State: 000000ff00000000fd000000040000000000000171000003a8fc0200000009fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb0000000a0049006d006100670065000000002e000001340000000000000000fb000000100044006900730070006c006100790073010000003b000003a8000000c700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730000000286000000a70000005c00ffffff000000010000011100000435fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000002e00000435000000a000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004b000000040fc0100000002fb0000000800540069006d00650000000000000004b00000000000000000fb0000000800540069006d00650100000000000004500000000000000000000005c2000003a800000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Hide Right Dock: false
+  QMainWindow State: 000000ff00000000fd00000004000000000000019300000572fc0200000009fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000008600fffffffb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb0000000a0049006d006100670065000000002e000001340000000000000000fb000000100044006900730070006c0061007900730100000056000005720000012600fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730000000286000000a70000008600ffffff000000010000011f00000572fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073010000005600000572000000ec00fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004b000000040fc0100000002fb0000000800540069006d00650000000000000004b00000000000000000fb0000000800540069006d00650100000000000004500000000000000000000006e40000057200000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Tool Properties:
     collapsed: false
   Views:
-    collapsed: true
-  Width: 1849
-  X: 71
-  Y: 28
+    collapsed: false
+  Width: 2472
+  X: 88
+  Y: 41

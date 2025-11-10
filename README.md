@@ -35,8 +35,8 @@ If you use this project in your research, please cite:
 - [:card_file_box: Sample Datasets](#card_file_box-sample-datasets)
 - [:running_man: Run](#running_man-run)
 - [:wheelchair: Services of LIO-SEGMOT](#wheelchair-services-of-lio-segmot)
-  - [`/lio_segmot/save_map`](#lio_segmotsave_map)
-  - [`/lio_segmot/save_estimation_result`](#lio_segmotsave_estimation_result)
+  - [`/lio_track/save_map`](#lio_tracksave_map)
+  - [`/lio_track/save_estimation_result`](#lio_tracksave_estimation_result)
 - [:memo: Remarks](#memo-remarks)
   - [Hyperparameters](#hyperparameters)
     - [Hierarchical Criterion](#hierarchical-criterion)
@@ -106,7 +106,7 @@ We provide two object detection services for LIO-SEGMOT:
 
 - [StephLin/SE-SSD-ROS (Apache-2.0 license)](https://github.com/StephLin/SE-SSD-ROS)
   (based on [Vegeta2020/SE-SSD](https://github.com/Vegeta2020/SE-SSD))
-- [StephLin/livox_detection_lio_segmot (GPL-3.0 license)](https://github.com/StephLin/livox_detection_lio_segmot)
+- [StephLin/livox_detection_lio_track (GPL-3.0 license)](https://github.com/StephLin/livox_detection_lio_track)
   (based on [Livox-SDK/livox_detection](https://github.com/Livox-SDK/livox_detection))
 
 Please refer to their installation instructions accordingly.
@@ -155,20 +155,20 @@ Please follow the steps to execute LIO-SEGMOT properly:
    #!/bin/bash
    # Please select one of the following configs to launch the service properly:
    # 1. With KITTI configuration
-   roslaunch lio_segmot run_kitti.launch
+   roslaunch lio_track run_kitti.launch
 
    # 2. With Hsinchu configuration
-   roslaunch lio_segmot run_hsinchu.launch
+   roslaunch lio_track run_hsinchu.launch
 
    # 3. Undefined (same as KITTI configuration)
-   roslaunch lio_segmot run.launch
+   roslaunch lio_track run.launch
    ```
 
 3. Launch the selected object detection service:
 
    ```bash
    #!/bin/bash
-   # SE-SSD-ROS & livox_detection_lio_segmot
+   # SE-SSD-ROS & livox_detection_lio_track
    # Please check their documentation to see how they are launched
    ```
 
@@ -176,7 +176,7 @@ Please follow the steps to execute LIO-SEGMOT properly:
 
    ```bash
    #!/bin/bash
-   rosrun lio_segmot lio_segmot_offlineBagPlayer _bag_filename:="path/to/your/sequence.bag"
+   rosrun lio_track lio_track_offlineBagPlayer _bag_filename:="path/to/your/sequence.bag"
    ```
 
    The default registered LiDAR and IMU topics are `/points_raw` and `/imu_raw`,
@@ -186,26 +186,26 @@ Please follow the steps to execute LIO-SEGMOT properly:
    and IMU topics, respectively):
 
    ```bash
-   rosrun lio_segmot lio_segmot_offlineBagPlayer _bag_filename:="GuangfuRoad-06-13.bag" \
+   rosrun lio_track lio_track_offlineBagPlayer _bag_filename:="GuangfuRoad-06-13.bag" \
                                                  _lidar_topic:="/velodyne_points" \
                                                  _imu_topic:="/imu/data"
    ```
 
 ## :wheelchair: Services of LIO-SEGMOT
 
-### `/lio_segmot/save_map`
+### `/lio_track/save_map`
 
 ```txt
-Usage: rosservice call /lio_segmot/save_map [RESOLUTION] [OUTPUT_DIR]
-Example: rosservice call /lio_segmot/save_map 0.2 /path/to/a/directory/
+Usage: rosservice call /lio_track/save_map [RESOLUTION] [OUTPUT_DIR]
+Example: rosservice call /lio_track/save_map 0.2 /path/to/a/directory/
 ```
 
 This service saves LiDAR map to the local machine.
 
-### `/lio_segmot/save_estimation_result`
+### `/lio_track/save_estimation_result`
 
 ```txt
-Usage: rosservice call /lio_segmot/save_estimation_result
+Usage: rosservice call /lio_track/save_estimation_result
 ```
 
 This service outputs current estimation results including
@@ -215,20 +215,20 @@ This service outputs current estimation results including
 - $\color{gray}\textsf{(INTERNAL USE)}$ `nav_msgs::Path[] objectVelocities`: Linear and angular velocities for each object (indexed by the factor graph)
 - `nav_msgs::Path[] trackingObjectTrajectories`: Trajectories for each object (indexed by LIO-SEGMOT)
 - `nav_msgs::Path[] trackingObjectVelocities`: Linear and angular velocities for each object (indexed by LIO-SEGMOT)
-- `lio_segmot::ObjectStateArray[] trackingObjectStates`: States for each object during its lifetime (indexed by LIO-SEGMOT)
-- $\color{gray}\textsf{(INTERNAL USE)}$ `lio_segmot::flags[] objectFlags`: Flags for each object during its lifetime (indexed by the factor graph)
-- `lio_segmot::flags[] trackingObjectFlags`: Flags for each object during its lifetime (indexed by LIO-SEGMOT)
+- `lio_track::ObjectStateArray[] trackingObjectStates`: States for each object during its lifetime (indexed by LIO-SEGMOT)
+- $\color{gray}\textsf{(INTERNAL USE)}$ `lio_track::flags[] objectFlags`: Flags for each object during its lifetime (indexed by the factor graph)
+- `lio_track::flags[] trackingObjectFlags`: Flags for each object during its lifetime (indexed by LIO-SEGMOT)
 
-in which custom types `lio_segmot::ObjectStateArray` (underlying `lio_segmot::ObjectState`) and `lio_segmot::flags` are given by
+in which custom types `lio_track::ObjectStateArray` (underlying `lio_track::ObjectState`) and `lio_track::flags` are given by
 
-- `lio_segmot::ObjectStateArray`
+- `lio_track::ObjectStateArray`
 
   ```cpp
   Header header
-  lio_segmot::ObjectState[] objects
+  lio_track::ObjectState[] objects
   ```
 
-- `lio_segmot::ObjectState`
+- `lio_track::ObjectState`
 
   ```cpp
   Header header
@@ -262,7 +262,7 @@ in which custom types `lio_segmot::ObjectStateArray` (underlying `lio_segmot::Ob
   bool isFirst           // Is the object just initialized at this moment?
   ```
 
-- `lio_segmot/flags`
+- `lio_track/flags`
 
   ```cpp
   // Flags of the object in its lifetime

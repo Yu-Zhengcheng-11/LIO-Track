@@ -1,4 +1,4 @@
 float32 resolution
 string destination
----
+--- # --- 之前的内容属于请求部分，--- 之后的内容属于响应部分
 bool success

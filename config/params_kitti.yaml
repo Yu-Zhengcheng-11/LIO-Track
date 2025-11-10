@@ -1,4 +1,4 @@
-lio_segmot:
+lio_track:
 
   # Topics
   pointCloudTopic: "points_raw"               # Point cloud data
@@ -21,14 +21,15 @@ lio_segmot:
   # Export settings
   savePCD: false                              # https://github.com/TixiaoShan/LIO-SAM/issues/3
   savePCDDirectory: "/Downloads/LOAM/"        # in your home folder, starts and ends with "/". Warning: the code deletes "LOAM" folder then recreates it. See "mapOptimization" for implementation
-
+  save_traj_to_path: "/media/yzc/MyPassport/slam_dataset/odometry/10/pred_traj.txt"
+  
   # Sensor Settings
   sensor: velodyne                            # lidar sensor type, either 'velodyne' or 'ouster'
   N_SCAN: 64                                  # number of lidar channel (i.e., 16, 32, 64, 128)
-  Horizon_SCAN: 1800                          # lidar horizontal resolution (Velodyne:1800, Ouster:512,1024,2048)
-  downsampleRate: 1                           # default: 1. Downsample your data if too many points. i.e., 16 = 64 / 4, 16 = 16 / 1
+  Horizon_SCAN: 2083                          # lidar horizontal resolution (Velodyne:1800, Ouster:512,1024,2048)
+  downsampleRate: 2                           # default: 1. Downsample your data if too many points. i.e., 16 = 64 / 4, 16 = 16 / 1
   lidarMinRange: 1.0                          # default: 1.0, minimum lidar range to be used
-  lidarMaxRange: 1000.0                       # default: 1000.0, maximum lidar range to be used
+  lidarMaxRange: 250.0                       # default: 1000.0, maximum lidar range to be used
 
   # IMU Settings
   imuAccNoise: 3.9939570888238808e-03
@@ -38,7 +39,7 @@ lio_segmot:
   imuGravity: 9.80511
   imuRPYWeight: 0.01
 
-  # Extrinsics (lidar -> IMU, KITTI)
+  # Extrinsics (lidar -> IMU, KITTI) 2011_09_30, 2011_09_26, 2011_10_03 通用
   extrinsicTrans: [-8.086759e-01, 3.195559e-01, -7.997231e-01]
   extrinsicRot: [ 9.999976e-01, 7.553071e-04, -2.035826e-03,
                  -7.854027e-04, 9.998898e-01, -1.482298e-02,
@@ -129,7 +130,7 @@ lio_segmot:
   objectLinearVelocityConsistencyVarianceThreshold: 1.0e-2  # m^2
 
   # Tracking
-  trackingStepsForLostObject: 3
+  trackingStepsForLostObject: 15
 
 
 # Navsat (convert GPS coordinates to Cartesian)

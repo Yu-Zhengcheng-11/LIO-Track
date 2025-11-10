@@ -1,8 +1,8 @@
-lio_segmot:
+lio_track:
 
   # Topics
-  pointCloudTopic: "points_raw"               # Point cloud data
-  imuTopic: "imu_raw"                         # IMU data
+  pointCloudTopic: "velodyne_points"               # Point cloud data
+  imuTopic: "imu"                          # IMU data
   odomTopic: "odometry/imu"                   # IMU pre-preintegration odometry, same frequency as IMU
   gpsTopic: "odometry/gpsz"                   # GPS odometry topic from navsat, see module_navsat.launch file
 
@@ -24,7 +24,7 @@ lio_segmot:
 
   # Sensor Settings
   sensor: velodyne                            # lidar sensor type, either 'velodyne' or 'ouster'
-  N_SCAN: 64                                  # number of lidar channel (i.e., 16, 32, 64, 128)
+  N_SCAN: 32                                  # number of lidar channel (i.e., 16, 32, 64, 128)
   Horizon_SCAN: 1800                          # lidar horizontal resolution (Velodyne:1800, Ouster:512,1024,2048)
   downsampleRate: 1                           # default: 1. Downsample your data if too many points. i.e., 16 = 64 / 4, 16 = 16 / 1
   lidarMinRange: 1.0                          # default: 1.0, minimum lidar range to be used
@@ -33,35 +33,19 @@ lio_segmot:
   # IMU Settings
   imuAccNoise: 3.9939570888238808e-03
   imuGyrNoise: 1.5636343949698187e-03
-  imuAccBiasN: 6.4356659353532566e-05
-  imuGyrBiasN: 3.5640318696367613e-05
+  imuAccBiasN: -0.01115890 # 6.4356659353532566e-05
+  imuGyrBiasN: 0.047315 # 3.5640318696367613e-05
   imuGravity: 9.80511
   imuRPYWeight: 0.01
 
-  # Extrinsics (lidar -> IMU, KITTI)
-  extrinsicTrans: [-8.086759e-01, 3.195559e-01, -7.997231e-01]
-  extrinsicRot: [ 9.999976e-01, 7.553071e-04, -2.035826e-03,
-                 -7.854027e-04, 9.998898e-01, -1.482298e-02,
-                  2.024406e-03, 1.482454e-02,  9.998881e-01]
-  extrinsicRPY: [ 9.999976e-01, 7.553071e-04, -2.035826e-03,
-                 -7.854027e-04, 9.998898e-01, -1.482298e-02,
-                  2.024406e-03, 1.482454e-02,  9.998881e-01]
-  # Extrinsics (lidar -> IMU, ITRI)
-  # extrinsicTrans: [0, 0, 0]
-  # extrinsicRot: [1, 0, 0,
-  #                 0, 1, 0,
-  #                 0, 0, 1]
-  # extrinsicRPY: [1, 0, 0,
-  #                 0, 1, 0,
-  #                 0, 0, 1]
-  # Extrinsics (lidar -> IMU, UrbanLoco)
-  # extrinsicTrans: [0, 0, -0.0762]
-  # extrinsicRot: [ 0, 1, 0,
-  #                -1, 0, 0,
-  #                 0, 0, 1]
-  # extrinsicRPY: [ 0, 1, 0,
-  #                -1, 0, 0,
-  #                 0, 0, 1]
+  # Extrinsics (LiDAR -> IMU)
+  extrinsicTrans: [ 0.036598, -0.030337, -0.151255 ]
+  extrinsicRot: [ 0.999580, 0.028288,  0.006316,
+                  -0.028162,  0.999419,  -0.019215,
+                  -0.006856, 0.019030,  0.999795]
+  extrinsicRPY: [ 0.999580, 0.028288,  0.006316,
+                  -0.028162,  0.999419,  -0.019215,
+                  -0.006856, 0.019030,  0.999795]
 
   # LOAM feature threshold
   edgeThreshold: 1.0
@@ -103,7 +87,8 @@ lio_segmot:
   globalMapVisualizationLeafSize: 1.0           # meters, global map visualization cloud density
 
   # Dynamic object data association
-  detectionMatchThreshold: 19.5
+  staticDetectionMatchThreshold: 1.6
+  dynamicDetectionMatchThreshold: 19.5
   dataAssociationVarianceVector: [3.0e-4, 3.0e-4, 3.0e-4, 5.0e-2, 3.0e-2, 3.0e-2]
   earlyLooselyCoupledMatchingVarianceVector: [3.0e-4, 3.0e-4, 3.0e-4, 5.0e-2, 5.0e-3, 5.0e-3]
   looselyCoupledMatchingVarianceVector: [1.0e-4, 1.0e-4, 1.0e-4, 2.0e-3, 2.0e-3, 2.0e-3]
@@ -123,13 +108,12 @@ lio_segmot:
   numberOfPreLooseCouplingSteps: 6
   numberOfVelocityConsistencySteps: 4
   numberOfInterLooseCouplingSteps: 0
-  tightCouplingDetectionErrorThreshold: 26.0
 
   objectAngularVelocityConsistencyVarianceThreshold: 1.0e-5  # rad^2
   objectLinearVelocityConsistencyVarianceThreshold: 1.0e-2  # m^2
 
   # Tracking
-  trackingStepsForLostObject: 3
+  trackingStepsForLostObject: 20
 
 
 # Navsat (convert GPS coordinates to Cartesian)

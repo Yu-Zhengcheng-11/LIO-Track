@@ -1,12 +1,10 @@
 <launch>
 
-    <arg name="project" default="lio_segmot"/>
+    <arg name="project" default="lio_track"/>
     
     <node pkg="$(arg project)" type="$(arg project)_imuPreintegration"   name="$(arg project)_imuPreintegration"    output="screen" 	respawn="true"/>
     <node pkg="$(arg project)" type="$(arg project)_imageProjection"     name="$(arg project)_imageProjection"      output="screen"     respawn="true"/>
     <node pkg="$(arg project)" type="$(arg project)_featureExtraction"   name="$(arg project)_featureExtraction"    output="screen"     respawn="true"/>
-    <node pkg="$(arg project)" type="$(arg project)_mapOptimization"
-    name="$(arg project)_mapOptimization"       output="screen"
-    respawn="false" launch-prefix="gdb -ex run --args"/>
+    <node pkg="$(arg project)" type="$(arg project)_mapOptimization"     name="$(arg project)_mapOptimization"      output="screen"     respawn="false"    launch-prefix="gdb --args"/>
     
 </launch>
